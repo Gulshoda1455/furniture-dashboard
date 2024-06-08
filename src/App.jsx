@@ -4,6 +4,8 @@ import Register from './pages/Auth/Register';
 import GeneralLayout from './pages/GeneralLayout';
 import './App.css';
 import Login from './pages/Auth/Login';
+import Categories from './pages/category/Categories';
+import Products from './pages/Products';
 function App() {
   
 
@@ -13,6 +15,8 @@ function App() {
          <Routes>
           <Route path='/' element={<GeneralLayout/>}>
           <Route index element={<Home/>}/>
+          <Route path='/category' element={<Categories/>}/>
+          <Route path='/products' element={<Products/>}/>
           </Route>
             <Route path='/register' element={<Register/>}/>
             <Route path='/login'   element={<Login/>}/>
