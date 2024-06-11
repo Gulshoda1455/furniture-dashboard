@@ -1,8 +1,6 @@
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Input, InputNumber,  Table, Typography } from 'antd';
-import styles from "./styles.module.css"
-
-const originData = [];
+import axios from 'axios';
 
 const EditableCell = ({
   editing,
@@ -40,34 +38,45 @@ const EditableCell = ({
 };
 const Categories = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const [data, setData] = useState([]);
 
- 
+  useEffect(()=>{
+    const getCategories=async()=>{
+           try{
+              const response =await axios.get("https://ecommerce-backend-fawn-eight.vercel.app/api/categories")
+              
+              setData(response.data)
+           } catch(err){
+            console.log(err);
+           }
+    }
+    getCategories()
+  },[])
+  console.log(data);
+
   const columns = [
+    {
+      title: 'Image',
+      dataIndex: 'image',
+      width: '25%',
+      editable:false,
+      edit:(imgUrl)=>{
+        return <img  src={imgUrl} alt={imgUrl}/>
+      }
+    },
     {
       title: 'name',
       dataIndex: 'name',
-      width: '25%',
-      editable: true,
-    },
-    {
-      title: 'age',
-      dataIndex: 'age',
       width: '15%',
       editable: true,
     },
+   
     {
-      title: 'address',
-      dataIndex: 'address',
-      width: '40%',
-      editable: true,
-    },
-    {
-      title: 'operation',
-      dataIndex: 'operation',
+      title: 'Edit',
+      dataIndex: 'editOperation',
       render: (_, record) => {
-        
-        return  (
+       
+        return (
           <Typography.Link >
             Edit
           </Typography.Link>
@@ -86,7 +95,7 @@ const Categories = () => {
         inputType: col.dataIndex === 'age' ? 'number' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
-        
+        // editing: isEditing(record),
       }),
     };
   });
@@ -101,8 +110,8 @@ const Categories = () => {
         bordered
         dataSource={data}
         columns={mergedColumns}
-        rowClassName={styles.editable_row}
-        
+        rowClassName="editable-row"
+       
       />
     </Form>
   );
